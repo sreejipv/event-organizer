@@ -1,8 +1,8 @@
 import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useState } from 'react'
-import {ALL_POSTS_QUERY} from '../db/quries/events'
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import {ALL_POSTS_QUERY, CREATE_EVENT_MUTATION} from '../db/quries/events'
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -17,15 +17,29 @@ export default function Home({ }) {
     // const [currentStep, setCurrentStep] = useState(1);
     const { loading, error, data } = useQuery(ALL_POSTS_QUERY);
     const [startDate, setStartDate] = useState();
-
-    console.log('data',error)
-    console.log('data',data)
-    function showMemberBlock() {
-        alert('133')
-    }
+    const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
 
     function onNext() {
-
+        const myDate = new Date(eventDate);
+        const formattedDate = myDate.toLocaleDateString("en-US", { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, "/");
+        
+        createEvent({
+            variables: {
+              input: {
+                name: eventName,
+                date: formattedDate,
+                count: eventSize,
+                description: eventDetails,
+                userId: "640d90b950dbcbc353a0b642"
+              },
+            },
+          })
+            .then((result) => {
+              console.log('Event created:', result.data.createEvent);
+            })
+            .catch((error) => {
+              console.error('Error creating event:', error);
+            });
         // setCurrentStep(currentStep+1)
     }
 
@@ -57,9 +71,9 @@ export default function Home({ }) {
 
                 <p className=" pb-2">Event Date?</p>
              
-                    <DatePicker className="pl-2 border-black border py-1 mb-3" selected={eventDate} onChange={(date) => setEventDate(date)} />
-
-
+                    <DatePicker className="pl-2 border-black border py-1 mb-3" 
+                    
+                    selected={eventDate} onChange={(date) => setEventDate(date)} />
 
                 <p className=" pb-2">Expected Number of Attendees?</p>
                 <input className="pl-2 border-black border py-1 mb-3"

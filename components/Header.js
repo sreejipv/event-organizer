@@ -2,6 +2,7 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Header() {
   const { data: session } = useSession()
+  // console.log('data', session)
   return (
     <>
         <div className="flex-row flex justify-end	">

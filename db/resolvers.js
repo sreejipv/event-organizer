@@ -2,6 +2,7 @@ const moment = require('moment');
 const Post = require('./models/post');
 const User = require('./models/user');
 const Event = require('./models/event')
+const jwt = require('jsonwebtoken');
 
 
 const resolvers = {
@@ -25,14 +26,31 @@ const resolvers = {
     event: async (_, { id }) => {
       const event = await Event.findById(id);
       return event;
-    },
+    }
   },
   Mutation: {
     createUser: async (_, { input }) => {
-      const { name, email } = input;
-      const user = new User({ name, email });
+      const { name, email, password } = input;
+      const user = new User({ name, email, password});
       await user.save();
       return user;
+    },
+
+    login: async (_, { input },{ res }) =>{
+    const {  email, password } = input;
+
+      const user = await User.findOne({ email }).select('+password');
+      if(!user) {
+        throw new Error('Invalid login')
+      }
+      const match = await user.matchPassword(password)
+      if(!match){
+        throw new Error('Invalid login credentials')
+      }
+        // Generate JWT
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+      const authRes = { user, token }
+      return authRes;
     },
     createPost: async (_, { input }) => {
       const { title, content, userId } = input;
@@ -43,12 +61,8 @@ const resolvers = {
 
     createEvent: async (_, { input }) => {
       const { name, description, date, count, userId } = input;
-      console.log('Received date:', date);
-      const parsedDate = moment(date, 'MM/DD/YYYY').toDate();
-  console.log('Parsed date:', parsedDate);
-
+      const parsedDate = moment(date, 'MM/DD/YYYY', 'Asia/Kolkata').utc().toDate();
       const event = new Event({ name, description, date: parsedDate, count, user: userId });
-  console.log('Parsed event:', event);
       
       await event.save();
       return event;
@@ -69,7 +83,8 @@ const resolvers = {
   Event: {
     date: async (parent) => {
       const event = await Event.findById(parent._id);
-      return event ? event.Date.toString() : null;
+      console.log('event', event?.date)
+      return event ? event.date.toString() : null;
     },
   }
 };

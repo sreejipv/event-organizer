@@ -12,6 +12,7 @@ scalar Number
     posts: [Post]
   }
 
+
   type Post {
     id: ID
     title: String
@@ -19,18 +20,23 @@ scalar Number
     user: User
   }
 
+  type AuthResponse {
+    user: User
+    token: String
+  }
 
   type Event {
     id: ID
     name: String
     description: String
-    date: Date
+    date: String
     count: Number
   }
 
   input CreateUserInput {
     name: String!
     email: String!
+    password: String!
   }
 
   input CreatePostInput {
@@ -46,6 +52,11 @@ scalar Number
     userId: ID!
   }
 
+  input loginInput {
+    email: String!,
+    password: String!
+  }
+
   type Query {
     users: [User]
     posts: [Post]
@@ -54,10 +65,13 @@ scalar Number
     event(id: ID!): Event
   }
 
+
   type Mutation {
     createUser(input: CreateUserInput!): User
     createEvent(input: CreateEventInput!): Event
     createPost(input: CreatePostInput!): Post
+    login(input: loginInput): AuthResponse
+
   }
 `;
 
