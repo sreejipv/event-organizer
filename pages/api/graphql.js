@@ -2,7 +2,7 @@
 import { ApolloServer, gql } from 'apollo-server-express';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import Cors from 'micro-cors';
-
+const cookieParser = require('cookie-parser');
 
 
 import typeDefs from '../../db/schema'
@@ -19,6 +19,7 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
+  context: ({ req, res }) => ({ req, res }),
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})]
 });
 

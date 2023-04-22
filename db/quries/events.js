@@ -25,3 +25,11 @@ export const CREATE_EVENT_MUTATION = gql`
   }
 `;
 
+export const CREATE_USER_MUTATION = gql`
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      name
+      email
+    }
+  }
+`;

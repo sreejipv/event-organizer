@@ -1,3 +1,4 @@
+import { serialize } from 'cookie';
 const moment = require('moment');
 const Post = require('./models/post');
 const User = require('./models/user');
@@ -29,13 +30,6 @@ const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, { input }) => {
-      const { name, email, password } = input;
-      const user = new User({ name, email, password});
-      await user.save();
-      return user;
-    },
-
     login: async (_, { input },{ res }) =>{
     const {  email, password } = input;
 
@@ -67,6 +61,27 @@ const resolvers = {
       await event.save();
       return event;
     },
+    createUser: async (_, { input },  { res }) => {
+      const { name, email, password } = input;
+      const user = new User({ name, email, password });
+      await user.save();
+      // exclude password field from the response
+      user.password = undefined;
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+      
+      const cookieOpts = {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        sameSite: "strict",
+        path: "/",
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+      };
+
+      const cookieValue = serialize('token', token, cookieOpts);
+      res.setHeader('Set-Cookie', [cookieValue]);
+      return user;
+    },
   },
   User: {
     posts: async (user) => {
@@ -83,7 +98,6 @@ const resolvers = {
   Event: {
     date: async (parent) => {
       const event = await Event.findById(parent._id);
-      console.log('event', event?.date)
       return event ? event.date.toString() : null;
     },
   }
