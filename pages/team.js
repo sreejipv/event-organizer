@@ -1,7 +1,6 @@
 import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useSession, signIn, signOut } from "next-auth/react"
-import Login from '../components/Login'
 import { useState } from 'react'
 import TeamStart from "../components/TeamStart"
 import TeamMembers from "../components/TeamMembers"

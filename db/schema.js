@@ -63,6 +63,7 @@ scalar Number
     user(id: ID!): User
     post(id: ID!): Post
     event(id: ID!): Event
+    getUser: User
   }
 
 

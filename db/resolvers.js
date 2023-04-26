@@ -27,7 +27,26 @@ const resolvers = {
     event: async (_, { id }) => {
       const event = await Event.findById(id);
       return event;
-    }
+    },
+    getUser: async (_, __, {req}) => {
+      const token = req.cookies.token;
+      console.log('token',req.cookies)
+      if (token) {
+        try {
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          console.log('decoded', decoded)
+          const user = await User.findById(decoded.userId);
+          console.log('user', user)
+          
+          if (user) {
+            return user;
+          }
+        } catch (error) {
+          // Handle invalid token
+        }
+      }
+      return null;
+    },
   },
   Mutation: {
     login: async (_, { input },{ res }) =>{

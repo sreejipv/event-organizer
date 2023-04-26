@@ -1,7 +1,6 @@
 import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useSession, signIn, signOut } from "next-auth/react"
-import Login from '../components/Login'
 import Header from '../components/Header'
 
 export default function Home({ isConnected }) {

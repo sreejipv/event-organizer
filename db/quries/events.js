@@ -13,6 +13,16 @@ query{
     }
   }
 `
+
+export const GET_USER = gql`
+  query getUser {
+    getUser {
+      id
+      name
+      email
+    }
+  }
+`;
 export const CREATE_EVENT_MUTATION = gql`
   mutation CreateEvent($input: CreateEventInput!) {
     createEvent(input: $input) {

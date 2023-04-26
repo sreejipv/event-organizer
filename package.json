@@ -8,6 +8,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.10",
     "@next-auth/mongodb-adapter": "1.0.3",
+    "@svgr/webpack": "^7.0.0",
     "apollo-server": "^3.5.0",
     "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
@@ -30,6 +31,7 @@
     "react-calendar": "^4.0.0",
     "react-datepicker": "^4.10.0",
     "react-dom": "^17.0.2",
+    "react-google-button": "^0.7.2",
     "react-query": "^3.39.3"
   },
   "devDependencies": {

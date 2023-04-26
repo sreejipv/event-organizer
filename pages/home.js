@@ -2,21 +2,17 @@ import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useState } from 'react'
 import {ALL_POSTS_QUERY, CREATE_EVENT_MUTATION} from '../db/quries/events'
-import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 var classNames = require('classnames');
 
 export default function Home({ }) {
-    const [start, setStart] = useState(false)
     const [eventName, setEventName] = useState('')
     const [eventDetails, setEventDetails] = useState('')
     const [eventSize, setEventSize] = useState(0)
     const [eventDate, setEventDate] = useState(new Date())
-    // const [currentStep, setCurrentStep] = useState(1);
-    const { loading, error, data } = useQuery(ALL_POSTS_QUERY);
-    const [startDate, setStartDate] = useState();
     const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
 
     function onNext() {
@@ -86,8 +82,8 @@ export default function Home({ }) {
                 <div className="flex flex-row justify-between w-100">
                
 
-               <button onClick={onNext} className="mt-3 bg-black  text-white   py-0.5 px-4 rounded">
-                   Submit
+               <button onClick={onNext} className="w-full mt-3 bg-black  text-white   py-0.5 px-4 rounded">
+                   Create event
                </button>
            </div>
             </div>
