@@ -2,12 +2,13 @@ import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useSession, signIn, signOut } from "next-auth/react"
 import Header from '../components/Header'
+import TopMenu from '../components/Menu/TopMenu'
 
 export default function Home({ isConnected }) {
   const { data: session, status } = useSession()
     console.log('data',session)
   return (
-    <div className="container mx-auto">
+    <div className=" mx-auto">
       <Header/>
       <Head>
         <title>Create Next App</title>

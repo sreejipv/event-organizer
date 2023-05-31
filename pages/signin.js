@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CREATE_USER_MUTATION, CREATE_EVENT_MUTATION, GET_USER } from '../db/quries/events'
 import { useMutation, useQuery } from "@apollo/client";
+import { getServerSideProps } from '../components/Utils/auth';
 import "react-datepicker/dist/react-datepicker.css";
 import LoginContainer from '../components/Auth/LoginContainer';
+import { useRouter } from 'next/router';
+import TopMenu from '../components/Menu/TopMenu'
 
-export default function Register({ }) {
+export default function SignIn(props) {
   const [formData, setFormData] = useState({});
   const [createUser, { error: createUserError }] = useMutation(CREATE_USER_MUTATION)
   const { loading, error, data } = useQuery(GET_USER);
@@ -12,6 +15,15 @@ export default function Register({ }) {
     const { name, value } = e.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
+  console.log('data', props)
+  const router = useRouter();
+
+  useEffect(()=>{
+    if(props?.isSignedIn){
+        router.push('/home');
+    } 
+  },[ router]);
+
   function onNext() {
 
     createUser({
@@ -33,7 +45,16 @@ export default function Register({ }) {
 
   return (
     <div>
-      <LoginContainer page="register" />
+        <TopMenu/>
+      
+    {
+      !props?.isSignedIn ?
+        <LoginContainer /> : <p>Loading....</p> 
+       
+    }
+      
     </div>
   )
 }
+
+export { getServerSideProps };

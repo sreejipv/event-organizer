@@ -14,7 +14,6 @@ export default function TeamMembers({}){
     function handleInput(e) {
         const {name, value} = e.target
         setMember({...member, [name]:value}) 
-        console.log('handleInput', e?.target?.name)
     }
     return(
        <>

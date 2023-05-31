@@ -16,7 +16,15 @@ const eventSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: Date.now, // sets the default value to the current date and time
+    default: Date.now, 
+  },
+  venue: {
+    type: String,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
   },
   user: {
     type: mongoose.Types.ObjectId,

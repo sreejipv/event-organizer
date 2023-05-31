@@ -30,6 +30,7 @@ export const CREATE_EVENT_MUTATION = gql`
       name
       description
       date
+      venue
       count
     }
   }
@@ -42,4 +43,26 @@ export const CREATE_USER_MUTATION = gql`
       email
     }
   }
+`;
+
+export const LOGIN_USER_MUTATION = gql`
+  mutation LoginUser($input: LoginInput!) {
+    login(input: $input) {
+      token,
+      user{
+        name
+      }
+    }
+  }
+`;
+
+export const GET_USER_EVENTS =  gql`
+  query getUserEvents {
+    getUserEvents {
+      name, 
+      description,
+      date,
+      venue
+    }
+  } 
 `;

@@ -28,15 +28,26 @@ const resolvers = {
       const event = await Event.findById(id);
       return event;
     },
+    getUserEvents: async(_, __, {req}) => {
+      // const token = req.cookies.token;
+      const token = req.cookies.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDQzYzVhMzE2NzVmZDA0Y2M4Y2M5NjIiLCJpYXQiOjE2ODU0MzE5OTF9.xZqHs2C5o1WQHEH-cRxN3bneoorTRisU3oPrB7ALW4U';
+
+      if (!token) {
+        throw new Error('Unauthorizedtoottoo');
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
+
+      const events = await Event.find({ user: userId})
+      return events;
+    },
+
     getUser: async (_, __, {req}) => {
       const token = req.cookies.token;
-      console.log('token',req.cookies)
       if (token) {
         try {
           const decoded = jwt.verify(token, process.env.JWT_SECRET);
-          console.log('decoded', decoded)
           const user = await User.findById(decoded.userId);
-          console.log('user', user)
           
           if (user) {
             return user;
@@ -62,6 +73,18 @@ const resolvers = {
       }
         // Generate JWT
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+      const cookieOpts = {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        sameSite: "strict",
+        path: "/",
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+      };
+
+      const cookieValue = serialize('token', token, cookieOpts);
+      res.setHeader('Set-Cookie', [cookieValue]);
+
       const authRes = { user, token }
       return authRes;
     },
@@ -72,14 +95,43 @@ const resolvers = {
       return post;
     },
 
-    createEvent: async (_, { input }) => {
-      const { name, description, date, count, userId } = input;
+    createEvent: async (_, { input }, { req }) => {
+      const token = req.cookies.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDQzYzVhMzE2NzVmZDA0Y2M4Y2M5NjIiLCJpYXQiOjE2ODU0MzE5OTF9.xZqHs2C5o1WQHEH-cRxN3bneoorTRisU3oPrB7ALW4U';
+      if (!token) {
+        throw new Error('Unauthorizedtoottoo');
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
+    
+      const { name, description, venue, date, time, count } = input;
       const parsedDate = moment(date, 'MM/DD/YYYY', 'Asia/Kolkata').utc().toDate();
-      const event = new Event({ name, description, date: parsedDate, count, user: userId });
-      
+      const event = new Event({ name, description, venue, date: parsedDate, time,count, user: userId });
       await event.save();
       return event;
     },
+
+    deleteEvent: async (_, { eventId }, { req }) => {
+      const token = req.cookies.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDQzYzVhMzE2NzVmZDA0Y2M4Y2M5NjIiLCJpYXQiOjE2ODU0MzE5OTF9.xZqHs2C5o1WQHEH-cRxN3bneoorTRisU3oPrB7ALW4U';
+      // const token = req.cookies.token;
+      if (!token) {
+        throw new Error('Unauthorized');
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
+    
+      const event = await Event.findById(eventId);
+      if (!event) {
+        throw new Error('Event not found');
+      }
+      
+      if (event.user.toString() !== userId) {
+        throw new Error('Unauthorized');
+      }
+    
+      await Event.findByIdAndDelete(eventId);
+      return event;
+    },
+
     createUser: async (_, { input },  { res }) => {
       const { name, email, password } = input;
       const user = new User({ name, email, password });
@@ -116,7 +168,10 @@ const resolvers = {
   },
   Event: {
     date: async (parent) => {
+      console.log('event parent', parent)
+
       const event = await Event.findById(parent._id);
+      console.log('event final', event)
       return event ? event.date.toString() : null;
     },
   }

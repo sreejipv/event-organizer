@@ -1,19 +1,22 @@
-import Head from 'next/head'
 // import clientPromise from './api/auth'
 import { useState } from 'react'
-import {ALL_POSTS_QUERY, CREATE_EVENT_MUTATION} from '../db/quries/events'
-import { useQuery, useMutation } from "@apollo/client";
+import { CREATE_EVENT_MUTATION} from '../db/quries/events'
+import { useMutation } from "@apollo/client";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Cookies from 'js-cookie';
+import { getServerSideProps } from '../components/Utils/auth';
 
 var classNames = require('classnames');
 
-export default function Home({ }) {
+export default function CreateEvent(props) {
     const [eventName, setEventName] = useState('')
     const [eventDetails, setEventDetails] = useState('')
     const [eventSize, setEventSize] = useState(0)
     const [eventDate, setEventDate] = useState(new Date())
     const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
+
+
 
     function onNext() {
         const myDate = new Date(eventDate);
@@ -25,8 +28,7 @@ export default function Home({ }) {
                 name: eventName,
                 date: formattedDate,
                 count: eventSize,
-                description: eventDetails,
-                userId: "640d90b950dbcbc353a0b642"
+                description: eventDetails
               },
             },
           })
@@ -91,3 +93,4 @@ export default function Home({ }) {
         </div>
     )
 }
+export { getServerSideProps };

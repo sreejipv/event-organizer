@@ -1,7 +1,7 @@
 import Login from './Login'
 import BannerImg from '../../assets/images/banner.png'
 
-export default function LoginContainer({ }) {
+export default function LoginContainer({ page }) {
     console.log('BannerImg', BannerImg)
     return (
         <>
@@ -10,7 +10,7 @@ export default function LoginContainer({ }) {
                 <div class="bg-white rounded-lg p-6">
                     <div className="flex">
                     
-                        <Login />
+                        <Login page={page}/>
                     </div>
 
                 </div>

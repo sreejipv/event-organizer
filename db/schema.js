@@ -30,6 +30,8 @@ scalar Number
     name: String
     description: String
     date: String
+    venue: String
+    time: String
     count: Number
   }
 
@@ -48,11 +50,12 @@ scalar Number
     name: String!
     description: String!
     date: Date!
+    venue: String!
+    time: String!
     count: Number!
-    userId: ID!
   }
 
-  input loginInput {
+  input LoginInput {
     email: String!,
     password: String!
   }
@@ -60,10 +63,12 @@ scalar Number
   type Query {
     users: [User]
     posts: [Post]
+    events: [Event]
     user(id: ID!): User
     post(id: ID!): Post
     event(id: ID!): Event
     getUser: User
+    getUserEvents: [Event]
   }
 
 
@@ -71,8 +76,8 @@ scalar Number
     createUser(input: CreateUserInput!): User
     createEvent(input: CreateEventInput!): Event
     createPost(input: CreatePostInput!): Post
-    login(input: loginInput): AuthResponse
-
+    login(input: LoginInput!): AuthResponse
+    deleteEvent(eventId: ID!): Event!
   }
 `;
 
