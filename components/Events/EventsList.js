@@ -1,4 +1,5 @@
 
+    import Link from 'next/link';
 
 export default function EventsList(props) {
 
@@ -21,9 +22,11 @@ const formatDate =(dateStr)=>{
             {props.events?.map((item, index)=>{
                 return (
                     <>
+                    <Link href={`/${item.id}`}>
                     <div className="bg-white shadow-md rounded-lg p-4 m-3 flex">
                         <div className="flex flex-middle flex-col justify-center p-4 bg-gray-100 rounded-lg">
                             <span> {formatDate(item.date)}</span>
+                            <span> {item.time}</span>
                         </div>
                        <div className=" p-4">
                        <h2 className="text-xl font-semibold ">{item.name}</h2>
@@ -31,6 +34,7 @@ const formatDate =(dateStr)=>{
                        </div>
                        
                     </div>
+                    </Link>
                     </>
                 )
             })}

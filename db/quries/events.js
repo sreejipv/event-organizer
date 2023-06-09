@@ -23,6 +23,19 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_EVENT = gql`
+  query getEvent($id: ID!) {
+    event(id: $id ){
+      id
+      name
+      description
+      date
+    }
+  }
+`;
+
+
 export const CREATE_EVENT_MUTATION = gql`
   mutation CreateEvent($input: CreateEventInput!) {
     createEvent(input: $input) {
@@ -62,6 +75,8 @@ export const GET_USER_EVENTS =  gql`
       name, 
       description,
       date,
+      time,
+      id,
       venue
     }
   } 
