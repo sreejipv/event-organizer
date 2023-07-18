@@ -8,6 +8,7 @@ export default function Register({ }) {
   const [formData, setFormData] = useState({});
   const [createUser, { error: createUserError }] = useMutation(CREATE_USER_MUTATION)
   const { loading, error, data } = useQuery(GET_USER);
+  console.log('data', data)
   function handleChange(e) {
     const { name, value } = e.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))

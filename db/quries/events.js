@@ -42,7 +42,8 @@ export const CREATE_EVENT_MUTATION = gql`
       id
       name
       description
-      date
+      sdate
+      edate
       venue
       count
     }

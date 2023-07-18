@@ -20,7 +20,7 @@ export default function SignIn(props) {
 
   useEffect(()=>{
     if(props?.isSignedIn){
-        router.push('/home');
+        router.push('/team');
     } 
   },[ router]);
 
