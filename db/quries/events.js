@@ -41,11 +41,9 @@ export const CREATE_EVENT_MUTATION = gql`
     createEvent(input: $input) {
       id
       name
-      description
       sdate
       edate
       venue
-      count
     }
   }
 `;

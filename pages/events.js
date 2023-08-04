@@ -12,8 +12,6 @@ export default function Events(props) {
   const [name, setName] = useState()
   const { loading, error, data } = useQuery(GET_USER_EVENTS);
   
-  console.log('loading', loading)
-  console.log('loading', data)
   const eventsCount =  !loading && data?.getUserEvents?.length
   return (
     <>

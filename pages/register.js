@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CREATE_USER_MUTATION, CREATE_EVENT_MUTATION, GET_USER } from '../db/quries/events'
+import { CREATE_USER_MUTATION, GET_USER } from '../db/quries/events'
 import { useMutation, useQuery } from "@apollo/client";
 import "react-datepicker/dist/react-datepicker.css";
 import LoginContainer from '../components/Auth/LoginContainer';

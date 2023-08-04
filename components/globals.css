@@ -22,3 +22,7 @@ span.scroll-fade-item.active {
 }
 
 
+.react-datepicker__input-container input {
+  width: 158px;
+  margin-right: 4px;
+}

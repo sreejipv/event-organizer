@@ -103,9 +103,9 @@ const resolvers = {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.userId;
     
-      const { name, description, venue, date, time, count } = input;
+      const { name, venue, date, time } = input;
       const parsedDate = moment(date, 'MM/DD/YYYY', 'Asia/Kolkata').utc().toDate();
-      const event = new Event({ name, description, venue, date: parsedDate, time,count, user: userId });
+      const event = new Event({ name, venue, date: parsedDate, time, user: userId });
       await event.save();
       return event;
     },

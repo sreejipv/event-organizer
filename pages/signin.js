@@ -15,7 +15,6 @@ export default function SignIn(props) {
     const { name, value } = e.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
-  console.log('data', props)
   const router = useRouter();
 
   useEffect(()=>{
